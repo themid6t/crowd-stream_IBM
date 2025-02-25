@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Streaming API Test</title>
+</head>
+<body>
+    <h1>Upload Video</h1>
+    <form id="uploadForm">
+        <input type="file" name="file" id="fileInput" required>
+        <input type="text" name="title" id="titleInput" placeholder="Enter Video Title" required>
+        <button type="submit">Upload</button>
+    </form>
+    <p id="uploadMessage"></p>
+
+    <h2>Stream Video</h2>
+    <input type="number" id="movieId" placeholder="Enter Movie ID">
+    <button onclick="loadStream()">Load Stream</button>
+
+    <h3>HLS Video Player</h3>
+    <video id="videoPlayer" controls width="640" height="360">
+        Your browser does not support the video tag.
+    </video>
+
+    <script>
+        document.getElementById('uploadForm').onsubmit = async function(event) {
+            event.preventDefault();
+        
+            let fileInput = document.getElementById('fileInput');
+            let titleInput = document.getElementById('titleInput');
+            let file = fileInput.files[0];
+            let title = titleInput.value;
+        
+            if (!file) {
+                alert("Please select a file.");
+                return;
+            }
+            if (!title) {
+                alert("Please enter a title.");
+                return;
+            }
+        
+            let formData = new FormData();
+            formData.append("file", file);
+            formData.append("title", title);
+        
+            try {
+                let response = await fetch('/upload', {
+                    method: "POST",
+                    body: formData
+                });
+        
+                let result = await response.json();
+                document.getElementById('uploadMessage').innerText = result.message || result.error;
+            } catch (error) {
+                document.getElementById('uploadMessage').innerText = "An error occurred during upload.";
+            }
+        };
+        
+
+        async function loadStream() {
+            let movieId = document.getElementById('movieId').value;
+            let video = document.getElementById('videoPlayer');
+
+            if (!movieId) {
+                alert("Please enter a movie ID.");
+                return;
+            }
+
+            try {
+                let response = await fetch(`/stream/${movieId}`);
+                let result = await response.json();
+
+                if (response.ok) {
+                    video.src = result.hls_url;
+                    video.load();
+                    video.play();
+                } else {
+                    alert(result.message || "Failed to load stream");
+                }
+            } catch (error) {
+                alert("An error occurred while loading the stream");
+            }
+        }
+    </script>
+</body>
+</html>
