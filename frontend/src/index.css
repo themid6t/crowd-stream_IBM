@@ -1,15 +1,75 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-primary: #3B82F6;
+  --color-primary-dark: #2563EB;
+  --color-primary-light: #60A5FA;
+
+  --color-secondary: #10B981;
+  --color-secondary-dark: #059669;
+  --color-secondary-light: #34D399;
+
+  --color-dark: #1F2937;
+  --color-dark-lighter: #374151;
+  --color-dark-darker: #111827;
+}
+
+/* Dark mode */
+@custom-variant dark (&:is(.dark *));
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
-  color: rgba(207, 58, 58, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--color-dark-darker);
+  color: #f8fafc;
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition-colors duration-200;
+  }
+  
+  .btn-primary {
+    background-color: var(--color-primary);
+    &:hover {
+      background-color: var(--color-primary-dark);
+    }
+    color: white;
+  }
+
+  .btn-secondary {
+    background-color: var(--color-secondary);
+    &:hover {
+      background-color: var(--color-secondary-dark);
+    }
+    color: white;
+  }
+
+  .btn-outline {
+    @apply border border-gray-300 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white;
+  }
+  
+  .card {
+    background-color: var(--color-dark-lighter);
+    @apply rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105;
+  }
+
+  .input {
+    background-color: white;
+    color: black;
+    border-color: var(--color-dark-lighter);
+    @apply w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary;
+  }
+}
