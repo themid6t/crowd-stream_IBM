@@ -18,7 +18,6 @@ function HomePage() {
       // const response = await axios.get('/api/movies');    // <----------------------------------   Get Movies List endpoint
       const response = await axios.get('http://127.0.0.1:5000/list');    // <----------------------------------   Get Movies List endpoint
       setMovies(response.data);
-      console.log(response.data);
     } catch (err) {
       console.error('Error fetching movies:', err);
       setError('Failed to load movies. Please try again later.');

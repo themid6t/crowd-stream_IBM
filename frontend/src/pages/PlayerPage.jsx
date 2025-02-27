@@ -9,7 +9,7 @@ function PlayerPage() {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
+  
   useEffect(() => {
     fetchMovie();
   }, [id]);
@@ -20,6 +20,7 @@ function PlayerPage() {
       // const response = await axios.get(`/api/movies/${id}`);   // <----------------------------------  Stream movie by ID
       const response = await axios.get(`http://127.0.0.1:5000/stream/${id}`);   // <----------------------------------  Stream movie by ID
       setMovie(response.data);
+      console.log(response.data);
     } catch (err) {
       console.error('Error fetching movie:', err);
       setError('Failed to load movie. It may have been removed or is unavailable.');
@@ -67,7 +68,7 @@ function PlayerPage() {
 
       <div className="bg-white dark:bg-dark-lighter rounded-lg shadow-lg overflow-hidden">
         <VideoPlayer 
-          src={`http://127.0.0.1:5000/${movie.hls_url}`} 
+          src={movie.streamUrl}
           poster={movie.thumbnailUrl} 
         />
         
@@ -78,7 +79,7 @@ function PlayerPage() {
           
           <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
             <span className="mr-4">
-              Added {new Date(movie.createdAt).toLocaleDateString()}
+              Added {new Date(movie.created_at).toLocaleDateString()}
             </span>
             {movie.duration && (
               <span className="flex items-center">

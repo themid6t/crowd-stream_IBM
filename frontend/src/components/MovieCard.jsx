@@ -1,6 +1,14 @@
 import { Link } from 'react-router-dom';
 
 function MovieCard({ movie }) {
+  
+  const createdAt = movie.createAt;
+  // Extract only the date part
+  const datePart = createdAt.split("T")[0]; // "2025-02-27"
+  // Convert to dd/mm/yyyy format
+  const [year, month, day] = datePart.split("-");
+  const formattedDate = `${day}-${month}-${year}`;
+
   return (
     <Link to={`/player/${movie.id}`} className="card group">
       <div className="relative aspect-video overflow-hidden">
@@ -20,7 +28,7 @@ function MovieCard({ movie }) {
       <div className="p-4">
         <h3 className="font-medium text-gray-900 dark:text-white truncate">{movie.title}</h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Added {new Date(movie.createdAt).toLocaleDateString()}
+          Added {formattedDate}
         </p>
       </div>
     </Link>

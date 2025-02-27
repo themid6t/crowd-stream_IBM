@@ -14,7 +14,7 @@ function Navbar() {
     if (currentUser) {
       navigate('/upload');
     } else {
-      navigate('/auth');
+      navigate('/upload');
     }
   };
 

@@ -62,7 +62,7 @@ function UploadPage() {
     formData.append('movie', movieFile);
     
     try {
-      await axios.post('/api/movies/upload', formData, { // <----------------------------------   Upload endpoint
+      await axios.post('http://127.0.0.1:5000/upload', formData, { // <----------------------------------   Upload endpoint
         headers: {
           'Content-Type': 'multipart/form-data'
         },

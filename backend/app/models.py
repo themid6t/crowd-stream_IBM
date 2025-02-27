@@ -17,11 +17,14 @@ class User(db.Model):
 class Movie(db.Model):
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     title = db.Column(db.String(120), unique=True, nullable=False)
-    duration = db.Column(db.Float)
+    description = db.Column(db.Text)
+    thumbnail_url = db.Column(db.String(255))
+    created_at = db.Column(db.String(20))
     status = db.Column(db.String(20), default='pending')
+    
+    duration = db.Column(db.Float, default=0.0)
     hls_url = db.Column(db.String(255))  # Increased length to 255 for URLs
     s3_url = db.Column(db.String(255))
-    thumbnail_url = db.Column(db.String(255))
     
     # Foreign key with relationship
     uploaded_by = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
