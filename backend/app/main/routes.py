@@ -12,7 +12,7 @@ HLS_FOLDER = 'app/static/streams'     # HLS streams are now in static
 
 @main_blueprint.route('/list', methods=['GET'])
 def list_movies():
-    current_app.logger.info("Fetching all movies")
+    # current_app.logger.info("Fetching all movies")
     movies = Movie.query.all()
     movie_list = []
     for movie in movies:
