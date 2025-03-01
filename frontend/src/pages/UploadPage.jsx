@@ -62,7 +62,7 @@ function UploadPage() {
     formData.append('movie', movieFile);
     
     try {
-      await axios.post('http://127.0.0.1:5000/upload', formData, { // <----------------------------------   Upload endpoint
+      await axios.post(`${import.meta.env.VITE_BACKEND}/upload`, formData, { // <----------------------------------   Upload endpoint
         headers: {
           'Content-Type': 'multipart/form-data'
         },
@@ -209,7 +209,7 @@ function UploadPage() {
                 id="movie-upload"
                 name="movie"
                 type="file"
-                accept="video/*"
+                accept=".mp4, .mkv, .avi, .mov, .flv, .wmv"//"video/*"
                 onChange={handleMovieFileChange}
                 className="sr-only"
               />

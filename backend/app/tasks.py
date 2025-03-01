@@ -1,7 +1,15 @@
 import os, subprocess
 from app.models import db, Movie
 from flask import current_app
+from ffmpeg import probe
 from . import celery
+
+def get_video_duration(video_path):
+    metadata = probe(video_path)
+    duration_seconds = float(metadata['format']['duration'])
+    duration_minutes = round(duration_seconds / 60, 2)  # Convert to minutes
+    return duration_minutes
+
 
 @celery.task(bind=True)
 def process_video_task(self, movie_id, file_path, hls_folder):
@@ -11,6 +19,7 @@ def process_video_task(self, movie_id, file_path, hls_folder):
             raise ValueError(f"Movie ID {movie_id} not found")
         
         job.status = "in_progress"
+        job.duration = get_video_duration(file_path)
         db.session.commit()
         current_app.logger.info(f"Movie ID {movie_id} status updated to in_progress")
 
@@ -21,14 +30,15 @@ def process_video_task(self, movie_id, file_path, hls_folder):
         hls_playlist = os.path.join(f"static/streams/{movie_id}", "output.m3u8")
         
         command = [
-            "ffmpeg", "-i", file_path,  # Input file
-            "-profile:v", "baseline",  # H.264 Baseline Profile for compatibility
+            "ffmpeg", "-i", file_path,              # Input file
+            "-sn",                                  # Disable subtitle recording
+            "-profile:v", "baseline",               # H.264 Baseline Profile for compatibility
             "-level", "3.0",
-            "-start_number", "0",  # Start segment numbering from 0
-            "-hls_time", "10",  # Each segment duration (in seconds)
-            "-hls_list_size", "0",  # Keep all segments in the playlist
-            "-f", "hls",  # Output format
-            os.path.join(output_dir, "output.m3u8")  # Output playlist file
+            "-start_number", "0",                   # Start segment numbering from 0
+            "-hls_time", "10",                      # Each segment duration (in seconds)
+            "-hls_list_size", "0",                  # Keep all segments in the playlist
+            "-f", "hls",                            # Output format
+            os.path.join(output_dir, "output.m3u8") # Output playlist file
         ]
 
         current_app.logger.info(f"Running command: {' '.join(command)}")

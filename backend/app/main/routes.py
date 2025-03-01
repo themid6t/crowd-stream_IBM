@@ -29,8 +29,7 @@ def list_movies():
     movies = Movie.query.all()
     movie_list = []
     for movie in movies:
-        if movie.status != "pending":
-            
+        if movie.status == "completed":
             # Create a full URL for the thumbnail
             thumbnail_url = movie.thumbnail_url
             if not thumbnail_url.startswith(('http://', 'https://')):

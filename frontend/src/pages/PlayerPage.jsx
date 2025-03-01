@@ -18,7 +18,7 @@ function PlayerPage() {
     try {
       setLoading(true);
       // const response = await axios.get(`/api/movies/${id}`);   // <----------------------------------  Stream movie by ID
-      const response = await axios.get(`http://127.0.0.1:5000/stream/${id}`);   // <----------------------------------  Stream movie by ID
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND}/stream/${id}`);   // <----------------------------------  Stream movie by ID
       setMovie(response.data);
       console.log(response.data);
     } catch (err) {

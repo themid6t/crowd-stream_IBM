@@ -22,7 +22,6 @@ celery = Celery(__name__, broker=Config.CELERY_BROKER_URL, result_backend=Config
 def create_app():
 
     app = Flask(__name__, static_folder="static")
-
     # Ensure that the static folders exist
     ensure_static_folders()
 
